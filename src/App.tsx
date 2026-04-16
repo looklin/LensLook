@@ -5,6 +5,7 @@ import {
   ModelSelector,
   ComparisonSection,
   Toast,
+  ImageRenderModal,
 } from '@/components';
 import {
   useToast,
@@ -33,6 +34,7 @@ function App() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [flashVisible, setFlashVisible] = useState(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
   const onError = useCallback(
     (message: string) => {
@@ -160,6 +162,7 @@ function App() {
         mode={mode}
         onToggleMode={handleToggleMode}
         onScreenshot={handleScreenshot}
+        onOpenImageModal={() => setIsImageModalOpen(true)}
       />
 
       <main className="main-content">
@@ -191,6 +194,10 @@ function App() {
       </main>
 
       <Toast toasts={toasts} onRemove={removeToast} />
+      <ImageRenderModal 
+        isOpen={isImageModalOpen} 
+        onClose={() => setIsImageModalOpen(false)} 
+      />
     </div>
   );
 }

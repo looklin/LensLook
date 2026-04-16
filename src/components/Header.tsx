@@ -1,12 +1,13 @@
-import { Camera, CameraOff, Download } from 'lucide-react';
+import { Camera, CameraOff, Download, ImagePlus } from 'lucide-react';
 
 interface HeaderProps {
   mode: 'camera' | 'video';
   onToggleMode: () => void;
   onScreenshot: () => void;
+  onOpenImageModal?: () => void;
 }
 
-export function Header({ mode, onToggleMode, onScreenshot }: HeaderProps) {
+export function Header({ mode, onToggleMode, onScreenshot, onOpenImageModal }: HeaderProps) {
   return (
     <header className="app-header">
       <div className="app-logo">
@@ -17,6 +18,15 @@ export function Header({ mode, onToggleMode, onScreenshot }: HeaderProps) {
         <span className="app-logo-sub">虚拟试戴</span>
       </div>
       <div className="header-actions">
+        {onOpenImageModal && (
+          <button
+            className="btn btn-primary"
+            onClick={onOpenImageModal}
+            title="使用图片"
+          >
+            <ImagePlus size={16} /> 使用图片
+          </button>
+        )}
         <button
           className="btn btn-blue btn-icon"
           onClick={onScreenshot}
@@ -24,10 +34,6 @@ export function Header({ mode, onToggleMode, onScreenshot }: HeaderProps) {
         >
           <Camera size={20} />
         </button>
-        {/* <button className="btn btn-outline btn-sm" onClick={onToggleMode}>
-          {mode === 'camera' ? <Camera size={16} /> : <CameraOff size={16} />}
-          {mode === 'camera' ? '切换视频' : '切换摄像头'}
-        </button> */}
       </div>
     </header>
   );

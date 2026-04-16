@@ -5,13 +5,29 @@ import type { FaceMeshResult } from '@/core/facemesh';
 
 export function useSceneManager(
   canvasRef: React.RefObject<HTMLCanvasElement>,
-  videoRef: React.RefObject<HTMLVideoElement>,
+  mediaRef: React.RefObject<HTMLVideoElement | HTMLImageElement>,
   initialModelPath: string
 ) {
   const sceneManagerRef = useRef<SceneManager | null>(null);
   const facemeshRef = useRef<FacemeshLandmarksProvider | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const frameProviderRef = useRef<{ start: () => void; stop: () => void } | null>(null);
+
+  const getMediaSize = useCallback(() => {
+    let vw = 640;
+    let vh = 480;
+    const media = mediaRef.current;
+    if (media) {
+      if ('videoWidth' in media) {
+        vw = (media as HTMLVideoElement).videoWidth || media.clientWidth || 640;
+        vh = (media as HTMLVideoElement).videoHeight || media.clientHeight || 480;
+      } else if ('naturalWidth' in media) {
+        vw = (media as HTMLImageElement).naturalWidth || media.clientWidth || 640;
+        vh = (media as HTMLImageElement).naturalHeight || media.clientHeight || 480;
+      }
+    }
+    return { vw, vh };
+  }, [mediaRef]);
 
   const initScene = useCallback(async () => {
     if (!canvasRef.current) return;
@@ -25,9 +41,8 @@ export function useSceneManager(
     sceneManagerRef.current = sceneManager;
 
     const facemesh = new FacemeshLandmarksProvider((result: FaceMeshResult) => {
-      if (sceneManagerRef.current && videoRef.current) {
-        const vw = videoRef.current.videoWidth || videoRef.current.clientWidth || 640;
-        const vh = videoRef.current.videoHeight || videoRef.current.clientHeight || 480;
+      if (sceneManagerRef.current && mediaRef.current) {
+        const { vw, vh } = getMediaSize();
         sceneManagerRef.current.resize(vw, vh);
         sceneManagerRef.current.onLandmarks(result.image, result.landmarks);
       }
@@ -35,20 +50,19 @@ export function useSceneManager(
     facemeshRef.current = facemesh;
 
     await facemesh.initialize();
-  }, [canvasRef, videoRef, initialModelPath]);
+  }, [canvasRef, mediaRef, initialModelPath, getMediaSize]);
 
   const startAnimation = useCallback(() => {
     const animate = () => {
       animationFrameRef.current = requestAnimationFrame(animate);
-      if (sceneManagerRef.current && videoRef.current) {
-        const vw = videoRef.current.videoWidth || videoRef.current.clientWidth || 640;
-        const vh = videoRef.current.videoHeight || videoRef.current.clientHeight || 480;
+      if (sceneManagerRef.current && mediaRef.current) {
+        const { vw, vh } = getMediaSize();
         sceneManagerRef.current.resize(vw, vh);
         sceneManagerRef.current.animate();
       }
     };
     animate();
-  }, [videoRef]);
+  }, [mediaRef, getMediaSize]);
 
   const stopAnimation = useCallback(() => {
     if (animationFrameRef.current) {

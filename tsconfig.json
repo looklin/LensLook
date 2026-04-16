@@ -18,7 +18,7 @@
     /* Path alias */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src-new/*"]
+      "@/*": ["src/*"]
     },
 
     /* Linting */
@@ -28,5 +28,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src-new"]
+  "include": ["src"]
 }

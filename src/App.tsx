@@ -57,7 +57,7 @@ function App() {
     '/asserts/glasses/g1/scene.gltf'
   );
 
-  const { mode, isLoading: videoLoading, start, toggleMode } = useVideoSource(
+  const { mode, isLoading: videoLoading, start } = useVideoSource(
     videoRef,
     facemeshRef,
     onError
@@ -146,21 +146,10 @@ function App() {
     showToast('位置已重置', 'info');
   }, [resetGlassesPosition, showToast]);
 
-  // 处理模式切换
-  const handleToggleMode = useCallback(() => {
-    toggleMode();
-    if (mode === 'camera') {
-      showToast('已切换到视频', 'info');
-    } else {
-      showToast('已切换到摄像头', 'info');
-    }
-  }, [toggleMode, mode, showToast]);
 
   return (
     <div id="app">
       <Header
-        mode={mode}
-        onToggleMode={handleToggleMode}
         onScreenshot={handleScreenshot}
         onOpenImageModal={() => setIsImageModalOpen(true)}
       />

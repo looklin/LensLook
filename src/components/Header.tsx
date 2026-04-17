@@ -1,13 +1,11 @@
-import { Camera, CameraOff, Download, ImagePlus } from 'lucide-react';
+import { Camera, ImagePlus } from 'lucide-react';
 
 interface HeaderProps {
-  mode: 'camera' | 'video';
-  onToggleMode: () => void;
   onScreenshot: () => void;
   onOpenImageModal?: () => void;
 }
 
-export function Header({ mode, onToggleMode, onScreenshot, onOpenImageModal }: HeaderProps) {
+export function Header({ onScreenshot, onOpenImageModal }: HeaderProps) {
   return (
     <header className="app-header">
       <div className="app-logo">

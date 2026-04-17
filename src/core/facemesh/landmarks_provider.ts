@@ -2,7 +2,7 @@ import { transformLandmarks } from './landmarks_helpers';
 import type { Landmark } from './landmarks_helpers';
 
 export interface FaceMeshResult {
-  image: HTMLVideoElement | HTMLCanvasElement;
+  image: HTMLVideoElement | HTMLCanvasElement | HTMLImageElement | ImageBitmap;
   landmarks: Landmark[];
 }
 
@@ -15,7 +15,7 @@ interface MediaPipeFaceMesh {
     minTrackingConfidence?: number;
   }): void;
   onResults(callback: (results: MediaPipeResults) => void): void;
-  send(input: { image: HTMLVideoElement | HTMLCanvasElement }): Promise<void>;
+  send(input: { image: HTMLVideoElement | HTMLCanvasElement | HTMLImageElement }): Promise<void>;
   initialize(): Promise<void>;
   close(): void;
 }
@@ -40,7 +40,7 @@ export class FacemeshLandmarksProvider {
     this.callback = callback;
   }
 
-  async send(image: HTMLVideoElement | HTMLCanvasElement): Promise<void> {
+  async send(image: HTMLVideoElement | HTMLCanvasElement | HTMLImageElement): Promise<void> {
     if (!this.faceMesh || !this.isReady) {
       return Promise.resolve();
     }
@@ -65,7 +65,7 @@ export class FacemeshLandmarksProvider {
       const transformed = transformLandmarks(multiFaceLandmarks[0]);
       if (transformed) {
         this.callback({
-          image: image as HTMLVideoElement | HTMLCanvasElement,
+          image: image as HTMLVideoElement | HTMLCanvasElement | HTMLImageElement | ImageBitmap,
           landmarks: transformed,
         });
       }

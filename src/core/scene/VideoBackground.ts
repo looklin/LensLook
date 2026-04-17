@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 export class VideoBackground {
   private scene: THREE.Scene;
-  private image: HTMLVideoElement | HTMLCanvasElement | ImageBitmap | null = null;
+  private image: HTMLVideoElement | HTMLCanvasElement | HTMLImageElement | ImageBitmap | null = null;
   private plane: THREE.Mesh | null = null;
   private texture: THREE.CanvasTexture | null = null;
   private width: number;
@@ -24,7 +24,7 @@ export class VideoBackground {
     }
   }
 
-  setImage(image: HTMLVideoElement | HTMLCanvasElement | ImageBitmap): void {
+  setImage(image: HTMLVideoElement | HTMLCanvasElement | HTMLImageElement | ImageBitmap): void {
     if (this.image !== image) {
       this.image = image;
       this.imageUpdated = true;

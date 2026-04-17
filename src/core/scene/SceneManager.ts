@@ -211,7 +211,7 @@ export class SceneManager {
     this.videoHeight = videoHeight;
   }
 
-  onLandmarks(image: HTMLVideoElement | HTMLCanvasElement | ImageBitmap, landmarks: Landmark[]): void {
+  onLandmarks(image: HTMLVideoElement | HTMLCanvasElement | HTMLImageElement | ImageBitmap, landmarks: Landmark[]): void {
     if (image && landmarks) {
       if (this.videoBg) {
         this.videoBg.setImage(image);
